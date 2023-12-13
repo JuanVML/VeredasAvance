@@ -1,0 +1,399 @@
+
+package Modelo;
+
+import conexion.ConexionRegistro;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Document;
+
+
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+
+
+public class DatosRegistrados extends javax.swing.JFrame {
+  ConexionRegistro enlace = new ConexionRegistro();
+  Connection conectp = enlace.conectar();
+  
+    public DatosRegistrados() {
+        initComponents();
+        mostrarDatos(0);
+    }
+public void mostrarDatos(int Estado){
+        DefaultTableModel datosproyec = new DefaultTableModel();
+        datosproyec.addColumn("Id");
+        datosproyec.addColumn("Nombre");
+        datosproyec.addColumn("Apellidos");
+        datosproyec.addColumn("Telefono");
+        datosproyec.addColumn("Inicio");
+        datosproyec.addColumn("Fin");
+        datosproyec.addColumn("DNI");
+        datosproyec.addColumn("Genero");
+        datosproyec.addColumn("Estado");
+        
+        jtblRegiProyect.setModel(datosproyec);
+        
+        String codsql = null;
+if (Estado == 0) {
+    codsql = "SELECT * FROM datosinge";
+} else if (Estado == 1) {
+    codsql = "SELECT * FROM datosinge WHERE Estado = 'En tramite'";
+} else if (Estado == 2) {
+    codsql = "SELECT * FROM datosinge WHERE Estado = 'En proceso'";
+} else if (Estado == 3) {
+    codsql = "SELECT * FROM datosinge WHERE Estado = 'Completado'";
+}
+        String []datos = new String[10];
+        try {
+            java.sql.Statement lee = conectp.createStatement();
+            ResultSet resultado = lee.executeQuery(codsql);
+            
+            while(resultado.next()){
+                datos[0] = resultado.getString(1);
+                datos[1] = resultado.getString(2);
+                datos[2] = resultado.getString(3);
+                datos[3] = resultado.getString(4);
+                datos[4] = resultado.getString(5);
+                datos[5] = resultado.getString(6);
+                datos[6] = resultado.getString(7);
+                datos[7] = resultado.getString(8);
+                datos[8] = resultado.getString(9);
+                datos[9] = resultado.getString(9);
+
+                datosproyec.addRow(datos);
+            }
+            jtblRegiProyect.setModel(datosproyec);           
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e + "Error en la consulta");
+        }    
+}
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtblRegiProyect = new javax.swing.JTable();
+        jButton6 = new javax.swing.JButton();
+        jcbxbuscarproyec = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        jbtneditarproyecto = new javax.swing.JButton();
+        jbtnEliminar = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jbtnGenerarPDF = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jtblRegiProyect.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jtblRegiProyect);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 700, 300));
+
+        jButton6.setBackground(new java.awt.Color(0, 0, 255));
+        jButton6.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(255, 255, 255));
+        jButton6.setText("BUSCAR");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 100, 40));
+
+        jcbxbuscarproyec.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---SELECCIONE--", "En tramite", "En proceso", "Completado" }));
+        jPanel2.add(jcbxbuscarproyec, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 200, 40));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("DATOS REGISTRADOS EN EL PROYECTO");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 510, -1));
+
+        jbtneditarproyecto.setBackground(new java.awt.Color(0, 0, 255));
+        jbtneditarproyecto.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jbtneditarproyecto.setForeground(new java.awt.Color(255, 255, 255));
+        jbtneditarproyecto.setText("EDITAR DATOS");
+        jbtneditarproyecto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtneditarproyectoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtneditarproyecto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 150, 50));
+
+        jbtnEliminar.setBackground(new java.awt.Color(255, 51, 51));
+        jbtnEliminar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jbtnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnEliminar.setText("Eliminar");
+        jbtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 460, 160, 50));
+
+        jButton5.setBackground(new java.awt.Color(0, 0, 255));
+        jButton5.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setText("REGRESAR");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 460, 160, 50));
+
+        jbtnGenerarPDF.setBackground(new java.awt.Color(255, 0, 0));
+        jbtnGenerarPDF.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        jbtnGenerarPDF.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnGenerarPDF.setText("Generar PDF");
+        jbtnGenerarPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGenerarPDFActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnGenerarPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 70, 180, 50));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 610));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 610));
+
+        pack();
+    }// </editor-fold>                        
+  
+    
+    private void jbtneditarproyectoActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+       
+        if (jtblRegiProyect.getSelectedRowCount() == 1) {
+        // Obtener la fila seleccionada
+        int filaSeleccionada = jtblRegiProyect.getSelectedRow();
+
+        // Obtener los datos de la fila seleccionada
+        String Nombre = jtblRegiProyect.getValueAt(filaSeleccionada, 1).toString();
+        String Apellidos = jtblRegiProyect.getValueAt(filaSeleccionada, 2).toString();
+        String Telefono = jtblRegiProyect.getValueAt(filaSeleccionada, 3).toString();
+        String Inicio = jtblRegiProyect.getValueAt(filaSeleccionada, 4).toString();
+        String Fin = jtblRegiProyect.getValueAt(filaSeleccionada, 5).toString();
+        String DNI = jtblRegiProyect.getValueAt(filaSeleccionada, 6).toString();
+        String Genero = jtblRegiProyect.getValueAt(filaSeleccionada, 7).toString();
+        String Estado = jtblRegiProyect.getValueAt(filaSeleccionada, 8).toString();
+        
+
+        // Abrir el nuevo JFrame Datoseditproyecto  y pasar los datos actuales
+    Datoseditproyecto datoseditFrame = new Datoseditproyecto(Nombre,Apellidos,Telefono,Inicio,Fin,DNI,Genero,Estado);
+   datoseditFrame.setVisible(true);
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una fila para editar.");
+    }  
+    }                                                  
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    int Buscar = jcbxbuscarproyec.getSelectedIndex();
+    mostrarDatos(Buscar);
+    }                                        
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        Registro P1=new Registro();
+        P1.setVisible(true);
+        dispose();       
+    }                                        
+
+    private void jbtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    if (jtblRegiProyect.getSelectedRowCount() != 1) {
+        return;
+    }
+
+    // Obtener el índice de la fila seleccionada
+    int fila = jtblRegiProyect.getSelectedRow();
+
+    // Obtener el valor de la columna que contiene el identificador único (por ejemplo, "Id")
+    String idAEliminar = jtblRegiProyect.getValueAt(fila, 0).toString();
+
+    // Eliminar la fila de la tabla visual
+    DefaultTableModel modelo = (DefaultTableModel) jtblRegiProyect.getModel();
+    modelo.removeRow(fila);
+
+    // Eliminar la fila correspondiente de la base de datos
+    eliminarFilaEnBaseDeDatos(idAEliminar);   
+    }                                            
+
+    private void eliminarFilaEnBaseDeDatos(String id) {
+    String sql = "DELETE FROM datosresidentes WHERE Id = ?";
+
+    try {
+        PreparedStatement eliminarStmt = conectp.prepareStatement(sql);
+        eliminarStmt.setString(1, id);
+        eliminarStmt.executeUpdate();
+        eliminarStmt.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al eliminar la fila de la base de datos: " + e.getMessage());
+    }
+    }               
+    
+    private void jbtnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {                                               
+   com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+
+    try {
+        // Especifica la ruta y el nombre del archivo PDF
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar PDF");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos PDF (*.pdf)", "pdf"));
+
+        int userSelection = fileChooser.showSaveDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String filePath = fileToSave.getAbsolutePath();
+
+            // Crea el archivo PDF
+            PdfWriter.getInstance(document, new FileOutputStream(filePath + ".pdf"));
+            document.open();
+
+            // Crea una tabla con dos celdas para colocar la imagen y el título al lado
+            PdfPTable headerTable = new PdfPTable(2);
+            headerTable.setWidthPercentage(100);
+
+            // Celda 1: Agrega la imagen en la esquina superior izquierda
+            Image img = Image.getInstance("C:\\\\Users\\\\JUANV0719\\\\Documents\\\\NetBeansProjects\\\\Veredanet\\\\src\\\\image\\\\logopdf.png");  // Reemplaza "ruta_de_tu_imagen.jpg" con la ruta de tu imagen
+            img.scaleToFit(100, 100);  // Ajusta el tamaño de la imagen
+            PdfPCell imageCell = new PdfPCell(img);
+            imageCell.setBorder(Rectangle.NO_BORDER);
+            headerTable.addCell(imageCell);
+
+            // Celda 2: Agrega el título "Datos Registrados en el Proyecto"
+            PdfPCell titleCell = new PdfPCell(new Phrase("Datos Registrados en el Proyecto"));
+            titleCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            titleCell.setBorder(Rectangle.NO_BORDER);
+            headerTable.addCell(titleCell);
+
+            // Agrega la tabla de encabezado al documento
+            document.add(headerTable);
+
+      // Agrega el contenido al PDF
+         
+            document.add(new Paragraph(" "));
+
+            // Crea una tabla y establece el número de columnas
+            PdfPTable table = new PdfPTable(jtblRegiProyect.getColumnCount());
+
+            // Agrega los nombres de las columnas como encabezados de la tabla
+            for (int i = 0; i < jtblRegiProyect.getColumnCount(); i++) {
+                table.addCell(createCell(jtblRegiProyect.getColumnName(i), true)); // Establece como encabezado
+            }
+
+            // Agrega los datos de la tabla al PDF
+            for (int i = 0; i < jtblRegiProyect.getRowCount(); i++) {
+                for (int j = 0; j < jtblRegiProyect.getColumnCount(); j++) {
+                    PdfPCell cell = createCell(jtblRegiProyect.getValueAt(i, j).toString(), i == 0 && j == 0);
+                    table.addCell(cell);
+                }
+            }
+
+            // Agrega la tabla al documento
+            document.add(table);
+
+            JOptionPane.showMessageDialog(this, "PDF generado exitosamente.");
+        }
+    } catch (DocumentException | IOException e) {
+        JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + e.getMessage());
+    } finally {
+        document.close();
+    }
+     
+    }                                              
+
+    private PdfPCell createCell(String content, boolean isFirstRowFirstColumn) {
+    PdfPCell cell = new PdfPCell(new com.itextpdf.text.Paragraph(content));
+    cell.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+
+    // Establece el color de fondo solo para la primera celda de la primera fila
+    if (isFirstRowFirstColumn) {
+        cell.setBackgroundColor(new com.itextpdf.text.BaseColor(255, 165, 0)); // Color naranja
+    }
+
+    return cell;
+}
+    
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(DatosRegistrados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(DatosRegistrados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(DatosRegistrados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(DatosRegistrados.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new DatosRegistrados().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbtnEliminar;
+    private javax.swing.JButton jbtnGenerarPDF;
+    private javax.swing.JButton jbtneditarproyecto;
+    private javax.swing.JComboBox<String> jcbxbuscarproyec;
+    private javax.swing.JTable jtblRegiProyect;
+    // End of variables declaration                   
+}
