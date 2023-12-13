@@ -1,0 +1,339 @@
+
+package Modelo;
+
+import javax.swing.table.DefaultTableModel;
+import conexion.ConexionRegistro;
+import java.awt.Image;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.sql.Connection;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import javax.swing.table.DefaultTableModel;
+
+public class DatosResidentes extends javax.swing.JFrame {
+    
+  ConexionRegistro enlace = new ConexionRegistro();
+  Connection conect = enlace.conectar();
+    public DatosResidentes() {
+        initComponents();
+        mostrarDatos(0,0);
+        this.setLocationRelativeTo(this);
+        setimagelabel(jLabel1,"src/Image/fondo.JPG");
+    }
+ public void mostrarDatos(int Genero, int Mantenimiento){
+        DefaultTableModel datosResidente = new DefaultTableModel();
+        datosResidente.addColumn("Id");
+        datosResidente.addColumn("Nombre");
+        datosResidente.addColumn("Apellidos");
+        datosResidente.addColumn("DNI");
+        datosResidente.addColumn("Celular");
+        datosResidente.addColumn("Direccion");
+        datosResidente.addColumn("Referencia");
+        datosResidente.addColumn("Genero");
+        datosResidente.addColumn("Mantenimiento");
+        datosResidente.addColumn("Veredas");
+        jtblTabla.setModel(datosResidente);
+        
+        String codsql = null;
+        
+        if(Genero== 0 && Mantenimiento == 0){
+            codsql = "SELECT * FROM datosresidentes";
+        }else{
+            if(Genero == 1 && Mantenimiento == 0){
+                codsql = "SELECT * FROM datosresidentes WHERE Genero = 'Masculino'";
+        }else{
+            if(Genero == 2 && Mantenimiento == 0){
+                codsql = "SELECT * FROM datosresidentes WHERE Genero = 'Femenino'";
+        }else{
+            if(Genero == 0 && Mantenimiento == 1){
+                codsql = "SELECT * FROM datosresidentes WHERE Mantenimiento = 'Si'";
+        }else{
+            if(Genero == 0 && Mantenimiento == 2){
+                codsql = "SELECT * FROM datosresidentes WHERE Mantenimiento = 'No'";
+        }else{
+            if(Genero == 1 && Mantenimiento == 1){
+                codsql = "SELECT * FROM datosresidentes WHERE Genero = 'Masculino' AND Mantenimiento = 'Si'";
+        }else{
+            if(Genero == 2 && Mantenimiento == 1){
+                codsql = "SELECT * FROM datosresidentes WHERE Genero = 'Femenino' AND Mantenimiento = 'Si'";
+        }else{
+            if(Genero == 1 && Mantenimiento == 2){
+                codsql = "SELECT * FROM datosresidentes WHERE Genero = 'Masculino' AND Mantenimiento = 'No'";
+        }else{
+            if(Genero == 2 && Mantenimiento == 2){
+                codsql = "SELECT * FROM datosresidentes WHERE Genero = 'Femenino' AND Mantenimiento = 'No'";
+        
+        }}}}}}}}}
+        String []datos = new String[10];
+        try {
+            java.sql.Statement leer = conect.createStatement();
+            ResultSet resultado = leer.executeQuery(codsql);
+            
+            while(resultado.next()){
+                datos[0] = resultado.getString(1);
+                datos[1] = resultado.getString(2);
+                datos[2] = resultado.getString(3);
+                datos[3] = resultado.getString(4);
+                datos[4] = resultado.getString(5);
+                datos[5] = resultado.getString(6);
+                datos[6] = resultado.getString(7);
+                datos[7] = resultado.getString(8);
+                datos[8] = resultado.getString(9);
+                datos[9] = resultado.getString(10);
+
+                datosResidente.addRow(datos);
+                
+            }
+            jtblTabla.setModel(datosResidente);
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e + "Error en la consulta");
+        }
+       
+}
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtblTabla = new javax.swing.JTable();
+        btnregresaresi = new javax.swing.JButton();
+        jbtnBuscar = new javax.swing.JButton();
+        jbtneditardatos = new javax.swing.JButton();
+        jcbxGenero = new javax.swing.JComboBox<>();
+        jbtnEliminar = new javax.swing.JButton();
+        jcbxMantenimiento = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("DATOS REGISTRADOS DE LOS RESIDENTES");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 510, -1));
+
+        jtblTabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jtblTabla);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 680, 250));
+
+        btnregresaresi.setBackground(new java.awt.Color(0, 0, 255));
+        btnregresaresi.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        btnregresaresi.setForeground(new java.awt.Color(255, 255, 255));
+        btnregresaresi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/flecha (1).png"))); // NOI18N
+        btnregresaresi.setText("REGRESAR");
+        btnregresaresi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnregresaresiActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnregresaresi, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 440, 160, 50));
+
+        jbtnBuscar.setBackground(new java.awt.Color(102, 255, 255));
+        jbtnBuscar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jbtnBuscar.setForeground(new java.awt.Color(0, 0, 0));
+        jbtnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/informacion.png"))); // NOI18N
+        jbtnBuscar.setText("BUSCAR");
+        jbtnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 130, 40));
+
+        jbtneditardatos.setBackground(new java.awt.Color(51, 51, 255));
+        jbtneditardatos.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
+        jbtneditardatos.setForeground(new java.awt.Color(255, 255, 255));
+        jbtneditardatos.setText("Editar Datos");
+        jbtneditardatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtneditardatosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtneditardatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 440, 150, 50));
+
+        jcbxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos los datos", "Masculino", "Femenino" }));
+        jcbxGenero.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Genero", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Sylfaen", 1, 14))); // NOI18N
+        jPanel1.add(jcbxGenero, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 50, 210, 70));
+
+        jbtnEliminar.setBackground(new java.awt.Color(255, 51, 51));
+        jbtnEliminar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jbtnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnEliminar.setText("Eliminar");
+        jbtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 440, 160, 50));
+
+        jcbxMantenimiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos los datos", "Si", "No" }));
+        jcbxMantenimiento.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Mantenimiento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Sylfaen", 1, 14))); // NOI18N
+        jcbxMantenimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbxMantenimientoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jcbxMantenimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 210, 70));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 810, 530));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 810, 530));
+
+        pack();
+    }// </editor-fold>                        
+
+    //para la imagen
+   private void setimagelabel(JLabel labelName,String root){
+       ImageIcon image = new ImageIcon (root);
+       Icon icon = new ImageIcon(
+       image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
+       labelName.setIcon(icon);
+       this.repaint();
+   } 
+    
+    
+    private void jbtneditardatosActionPerformed(java.awt.event.ActionEvent evt) {                                                
+   if (jtblTabla.getSelectedRowCount() == 1) {
+        // Obtener la fila seleccionada
+        int filaSeleccionada = jtblTabla.getSelectedRow();
+
+        // Obtener los datos de la fila seleccionada
+        String nombre = jtblTabla.getValueAt(filaSeleccionada, 1).toString();
+        String apellidos = jtblTabla.getValueAt(filaSeleccionada, 2).toString();
+        String dni = jtblTabla.getValueAt(filaSeleccionada, 3).toString();
+        String celular = jtblTabla.getValueAt(filaSeleccionada, 4).toString();
+        String direccion = jtblTabla.getValueAt(filaSeleccionada, 5).toString();
+        String referencia = jtblTabla.getValueAt(filaSeleccionada, 6).toString();
+        String genero = jtblTabla.getValueAt(filaSeleccionada, 7).toString();
+        String mantenimiento = jtblTabla.getValueAt(filaSeleccionada, 8).toString();
+        String veredas = jtblTabla.getValueAt(filaSeleccionada, 9).toString();
+
+        // Abrir el nuevo JFrame Datosedit y pasar los datos actuales
+    Datosedit datoseditFrame = new Datosedit(nombre, apellidos, dni, celular, direccion, referencia, genero, mantenimiento, veredas);
+   datoseditFrame.setVisible(true);
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una fila para editar.");
+    }
+    }                                               
+
+    private void jbtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {                                           
+     
+    int GeneroIndex = jcbxGenero.getSelectedIndex();
+    int MantenimientoIndex = jcbxMantenimiento.getSelectedIndex();
+    mostrarDatos(GeneroIndex, MantenimientoIndex);
+    }                                          
+
+    private void btnregresaresiActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        Registro P1=new Registro();
+        P1.setVisible(true);
+        dispose();  
+    }                                              
+
+    private void jbtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {                                             
+       if (jtblTabla.getSelectedRowCount() != 1) {
+        return;
+    }
+
+    // Obtener el índice de la fila seleccionada
+    int fila = jtblTabla.getSelectedRow();
+
+    // Obtener el valor de la columna que contiene el identificador único (por ejemplo, "Id")
+    String idAEliminar = jtblTabla.getValueAt(fila, 0).toString();
+
+    // Eliminar la fila de la tabla visual
+    DefaultTableModel modelo = (DefaultTableModel) jtblTabla.getModel();
+    modelo.removeRow(fila);
+
+    // Eliminar la fila correspondiente de la base de datos
+    eliminarFilaEnBaseDeDatos(idAEliminar);
+}
+
+// Método para eliminar una fila de la base de datos
+private void eliminarFilaEnBaseDeDatos(String id) {
+    String sql = "DELETE FROM datosresidentes WHERE Id = ?";
+
+    try {
+        PreparedStatement eliminarStmt = conect.prepareStatement(sql);
+        eliminarStmt.setString(1, id);
+        eliminarStmt.executeUpdate();
+        eliminarStmt.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al eliminar la fila de la base de datos: " + e.getMessage());
+    }
+    }                                            
+
+    private void jcbxMantenimientoActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+        // TODO add your handling code here:
+    }                                                 
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(DatosResidentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(DatosResidentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(DatosResidentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(DatosResidentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new DatosResidentes().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton btnregresaresi;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbtnBuscar;
+    private javax.swing.JButton jbtnEliminar;
+    private javax.swing.JButton jbtneditardatos;
+    private javax.swing.JComboBox<String> jcbxGenero;
+    private javax.swing.JComboBox<String> jcbxMantenimiento;
+    private javax.swing.JTable jtblTabla;
+    // End of variables declaration                   
+}
