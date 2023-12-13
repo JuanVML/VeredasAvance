@@ -1,6 +1,11 @@
 
 package Modelo;
 
+import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 
 public class ConfirmaRegistro extends javax.swing.JFrame {
 private boolean confirmado;
@@ -8,9 +13,17 @@ private boolean confirmado;
  public ConfirmaRegistro() {
       
         initComponents();
+         this.setLocationRelativeTo(this);
+        setimagelabel(jLabel3,"src/Image/pro.png");
     }
     
-    
+       private void setimagelabel(JLabel labelName,String root){
+       ImageIcon image = new ImageIcon (root);
+       Icon icon = new ImageIcon(
+       image.getImage().getScaledInstance(labelName.getWidth(), labelName.getHeight(), Image.SCALE_DEFAULT));
+       labelName.setIcon(icon);
+       this.repaint();
+   } 
     
     
  public boolean isConfirmado() {
@@ -26,6 +39,7 @@ private boolean confirmado;
         jLabel2 = new javax.swing.JLabel();
         jbtnNo = new javax.swing.JButton();
         jbtnSi = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,6 +75,7 @@ private boolean confirmado;
             }
         });
         jPanel1.add(jbtnSi, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 260));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -125,6 +140,7 @@ private boolean confirmado;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbtnNo;
     private javax.swing.JButton jbtnSi;
