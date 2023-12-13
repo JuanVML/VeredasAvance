@@ -4,6 +4,13 @@
  */
 package Modelo;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author JUANV0719
@@ -27,24 +34,28 @@ public class DatosRegistrados extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton5 = new javax.swing.JButton();
+        jtblRegiProyect = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jbtnPDF = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jbtnActualizar = new javax.swing.JButton();
+        jbtnEliminar = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jbtnGenerarPDF = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("DATOS REGISTRADOS EN EL PROYECTO");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 510, -1));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtblRegiProyect.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -55,32 +66,394 @@ public class DatosRegistrados extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtblRegiProyect);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 50, 820, -1));
-
-        jButton5.setBackground(new java.awt.Color(0, 0, 255));
-        jButton5.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("REGRESAR");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 530, 180, 60));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, 700, 300));
 
         jButton6.setBackground(new java.awt.Color(0, 0, 255));
         jButton6.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("BUSCAR");
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 530, 180, 60));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 100, 40));
 
-        jButton7.setBackground(new java.awt.Color(255, 51, 51));
-        jButton7.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("GENERAR PDF");
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 530, 180, 60));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---SELECCIONE--", "En tramite", "En proceso", "Completado" }));
+        jPanel2.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 200, 40));
+
+        jbtnPDF.setBackground(new java.awt.Color(255, 51, 51));
+        jbtnPDF.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jbtnPDF.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnPDF.setText("Descargar PDF");
+        jbtnPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnPDFActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 140, 50));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("DATOS REGISTRADOS EN EL PROYECTO");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 510, -1));
+
+        jButton1.setBackground(new java.awt.Color(51, 51, 255));
+        jButton1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Editar Datos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 150, 50));
+
+        jbtnActualizar.setBackground(new java.awt.Color(0, 0, 255));
+        jbtnActualizar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jbtnActualizar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnActualizar.setText("Actualizar ");
+        jbtnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnActualizarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 460, 160, 50));
+
+        jbtnEliminar.setBackground(new java.awt.Color(255, 51, 51));
+        jbtnEliminar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jbtnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnEliminar.setText("Eliminar");
+        jbtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 460, 160, 50));
+
+        jButton5.setBackground(new java.awt.Color(0, 0, 255));
+        jButton5.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setText("REGRESAR");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 460, 160, 50));
+
+        jbtnGenerarPDF.setBackground(new java.awt.Color(51, 204, 255));
+        jbtnGenerarPDF.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        jbtnGenerarPDF.setForeground(new java.awt.Color(0, 0, 0));
+        jbtnGenerarPDF.setText("Generar PDF");
+        jbtnGenerarPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGenerarPDFActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jbtnGenerarPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 70, 150, 50));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 610));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 610));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+  
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+     /*
+        Nombre:formulario  Datosedit
+        abre ventana con los datos a editar txt y demas...
+        
+        dentro de este formulario 
+        
+        private void actualizar datos:(){
+        File url = new File(ubicacion+jtxtDNI.getText()+".registros");
+        if(jtxtDNI.getText().equals("")){
+            JOptionPane.showMessageDialog(rootPane, "Indique el registro a editar");
+        }else{
+            if(url.exists()){
+                try{
+                FileWriter permite_escrito = new FileWriter(ubicacion+jtxtDNI.getText()+".registros");
+                String DNI = "DNI = ";
+                String NOMBRES = "NOMBRES = ";
+                String APELLIDOS = "APELLIDOS = ";
+                String HORARIO = "HORARIO = ";
+                
+                PrintWriter guardar = new PrintWriter(permite_escrito);
+                guardar.println(DNI+jtxtDNI.getText());
+                guardar.println(NOMBRES+jtxtNombre.getText());
+                guardar.println(APELLIDOS+jtxtApellido.getText());
+                guardar.println(HORARIO+jtxtHorario.getText());
+                permite_escrito.close();
+                JOptionPane.showMessageDialog(rootPane, "Registro editado correctamente");--->    despues de actualizar : mensaje---Datos editados 
+                ActualizarTabla();
+                
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(rootPane, "Error"+e);
+            }   
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "El registro no existe");
+            }
+            
+        }
+    }
+
+      despues se cierra y solo muestra el : DATOS REGISTRADOS EN EL PROYECTO
+        
+        ver en proyecto de poo las conexiones y adaptarlas.
+        */      
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    /*
+        Metodo buscar:
+        Este metodo busca los datos ingresados en la tabla de datos 
+        con el combo: int dia = jcbxDias.getSelectedIndex();
+        y me muestra los datos :   
+        mostrarDatos(dia);
+        
+       aca hay 2 , hacerlo con 1:
+        
+        Metodo mostrar datos : 
+        
+        public void mostrarDatos(int dias, int especialidad){
+        DefaultTableModel paciente = new DefaultTableModel();
+        paciente.addColumn("ID");
+        paciente.addColumn("Dia");
+        paciente.addColumn("Especialidad");
+        paciente.addColumn("Doctor");
+        paciente.addColumn("Horario");
+        jtblHorario.setModel(paciente);
+        
+        String codsql = null;
+        
+        if(dias == 0 && especialidad == 0){
+            codsql = "SELECT * FROM especialidad";
+        }else{
+            if(dias == 1 && especialidad == 0){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Lunes'";
+        }else{
+            if(dias == 2 && especialidad == 0){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Martes'";
+        }else{
+            if(dias == 3 && especialidad == 0){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Miercoles'";
+        }else{
+            if(dias == 4 && especialidad == 0){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Jueves'";
+        }else{
+            if(dias == 5 && especialidad == 0){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Viernes'";
+        }else{
+            if(dias == 0 && especialidad == 1){
+                codsql = "SELECT * FROM especialidad WHERE Especialidad = 'Dermatología'";
+        }else{
+            if(dias == 0 && especialidad == 2){
+                codsql = "SELECT * FROM especialidad WHERE Especialidad = 'Geriatría'";
+        }else{
+            if(dias == 0 && especialidad == 3){
+                codsql = "SELECT * FROM especialidad WHERE Especialidad = 'Obstetricia'";
+        }else{
+            if(dias == 0 && especialidad == 4){
+                codsql = "SELECT * FROM especialidad WHERE Especialidad = 'Oftalmología'";
+        }else{
+            if(dias == 0 && especialidad == 5){
+                codsql = "SELECT * FROM especialidad WHERE Especialidad = 'Pediatría'";
+        }else{
+            if(dias == 1 && especialidad == 1){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Lunes' AND Especialidad = 'Dermatología'";
+        }else{
+            if(dias == 2 && especialidad == 1){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Martes' AND Especialidad = 'Dermatología'";
+        }else{
+            if(dias == 3 && especialidad == 1){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Miercoles' AND Especialidad = 'Dermatología'";
+        }else{
+            if(dias == 4 && especialidad == 1){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Jueves' AND Especialidad = 'Dermatología'";
+        }else{
+            if(dias == 5 && especialidad == 1){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Viernes' AND Especialidad = 'Dermatología'";
+        }else{
+            if(dias == 1 && especialidad == 2){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Lunes' AND Especialidad = 'Geriatría'";
+        }else{
+            if(dias == 2 && especialidad == 2){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Martes' AND Especialidad = 'Geriatría'";
+        }else{
+            if(dias == 3 && especialidad == 2){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Miercoles' AND Especialidad = 'Geriatría'";
+        }else{
+            if(dias == 4 && especialidad == 2){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Jueves' AND Especialidad = 'Geriatría'";
+        }else{
+            if(dias == 5 && especialidad == 2){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Viernes' AND Especialidad = 'Geriatría'";
+        }else{
+            if(dias == 1 && especialidad == 3){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Lunes' AND Especialidad = 'Obstetricia'";
+        }else{
+            if(dias == 2 && especialidad == 3){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Martes' AND Especialidad = 'Obstetricia'";
+        }else{
+            if(dias == 3 && especialidad == 3){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Miercoles' AND Especialidad = 'Obstetricia'";
+        }else{
+            if(dias == 4 && especialidad == 3){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Jueves' AND Especialidad = 'Obstetricia'";
+        }else{
+            if(dias == 5 && especialidad == 3){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Viernes' AND Especialidad = 'Obstetricia'";
+        }else{
+            if(dias == 1 && especialidad == 4){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Lunes' AND Especialidad = 'Oftalmología'";
+        }else{
+            if(dias == 2 && especialidad == 4){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Martes' AND Especialidad = 'Oftalmología'";
+        }else{
+            if(dias == 3 && especialidad == 4){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Miercoles' AND Especialidad = 'Oftalmología'";
+        }else{
+            if(dias == 4 && especialidad == 4){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Jueves' AND Especialidad = 'Oftalmología'";
+        }else{
+            if(dias == 5 && especialidad == 4){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Viernes' AND Especialidad = 'Oftalmología'";
+        }else{
+            if(dias == 1 && especialidad == 5){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Lunes' AND Especialidad = 'Pediatría'";
+        }else{
+            if(dias == 2 && especialidad == 5){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Martes' AND Especialidad = 'Pediatría'";
+        }else{
+            if(dias == 3 && especialidad == 5){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Miercoles' AND Especialidad = 'Pediatría'";
+        }else{
+            if(dias == 4 && especialidad == 5){
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Jueves' AND Especialidad = 'Pediatría'";
+        }else{
+                codsql = "SELECT * FROM especialidad WHERE Día = 'Viernes' AND Especialidad = 'Pediatría'";
+        }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+        
+        String []datos = new String[5];
+        
+        try {
+            Statement leer = conect.createStatement();
+            ResultSet resultado = leer.executeQuery(codsql);
+            
+            while(resultado.next()){
+                datos[0] = resultado.getString(1);
+                datos[1] = resultado.getString(2);
+                datos[2] = resultado.getString(3);
+                datos[3] = resultado.getString(4);
+                datos[4] = resultado.getString(5);
+                paciente.addRow(datos);
+                
+            }
+            jtblHorario.setModel(paciente);
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e + "Error de consulta");
+        }
+    } 
+        
+        
+        
+        */
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    //eliminar
+    
+    
+    
+    private void jbtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnActualizarActionPerformed
+        ConfirmaActualizacionProyecto confirmacion = new ConfirmaActualizacionProyecto();
+    confirmacion.setVisible(true);
+
+    // Espera hasta que el formulario de confirmación se cierre
+    confirmacion.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            // Verifica la confirmación del formulario
+            if (confirmacion.isConfirmado()) {
+                // Si se confirma, guarda la información
+                //guardarInformacionProyecto();
+            } else {
+                // Si no se confirma, realiza las acciones necesarias o simplemente no hagas nada
+            }
+        }
+    });    
+    }//GEN-LAST:event_jbtnActualizarActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        Registro P1=new Registro();
+        P1.setVisible(true);
+        dispose();       
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jbtnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPDFActionPerformed
+/*Abrir el pdf en el navegador: 
+        
+          abrir(jtxtUsuario.getText());
+        }
+         public void abrir(String nombrePaciente) {
+          try {
+            File path = new File(nombrePaciente + ".pdf");
+             Desktop.getDesktop().open(path);
+           } catch (Exception ex) {
+            }
+        */ 
+    }//GEN-LAST:event_jbtnPDFActionPerformed
+
+    private void jbtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEliminarActionPerformed
+/*
+        Esto viene de Citas POO:
+        
+        int fila = jtblRegiProyect.getSelectedRow();
+if (fila >= 0) {
+    try {
+        String valor = jtblRegiProyect.getValueAt(fila, 0).toString();
+        guardarInformacionProyecto conexionCita = new guardarInformacionProyecto();
+        Connection connection = conexionCita.conectar();
+
+        if (connection != null) {
+            String query = "DELETE FROM citas WHERE Dni=?";
+            try (PreparedStatement pps = connection.prepareStatement(query)) {
+                pps.setString(1, valor);
+                pps.executeUpdate();
+                cargarDatosDesdeBD(); 
+            }
+              JOptionPane.showMessageDialog(null, "Datos eliminados");
+        connection.close();
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error al eliminar el dato: " + ex.getMessage());
+    }
+}
+  */      
+    }//GEN-LAST:event_jbtnEliminarActionPerformed
+
+    private void jbtnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGenerarPDFActionPerformed
+      /*
+        
+        Plantilla plantilla = new Plantilla (jtxtUsuario.getText(),
+       new Date().toString(),
+       "src/Imagenes/ClinicaAngelxd.png", 
+       this.personas);
+        try {
+            plantilla.crearPlantilla();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Cita.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(Cita.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */
+    }//GEN-LAST:event_jbtnGenerarPDFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -118,12 +491,18 @@ public class DatosRegistrados extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton jbtnActualizar;
+    private javax.swing.JButton jbtnEliminar;
+    private javax.swing.JButton jbtnGenerarPDF;
+    private javax.swing.JButton jbtnPDF;
+    private javax.swing.JTable jtblRegiProyect;
     // End of variables declaration//GEN-END:variables
 }
